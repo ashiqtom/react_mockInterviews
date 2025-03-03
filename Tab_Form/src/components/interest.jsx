@@ -1,38 +1,37 @@
-import { useState } from "react";
+import { useState } from "react"
 
-export default function Interest({ data, setData, error}) {
-  const { interests } = data;
+export default function InterestForm({data, setData, error}) {
+  const { interests } = data
   const [newInterest, setNewInterest] = useState('')
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if(newInterest.trim()==='') return;
-
+  const handleAddINterest = () => {
+    if(newInterest.length === '' ) return
     setData((prevState) => ({
       ...prevState,
       interests: [...prevState.interests, newInterest]
     }))
-    setNewInterest('');
+    setNewInterest('')
   }
 
-  const handleRemove = (indexToRemove) => {
+  const handleRemove = (removeIndex) => {
     setData((prevState) => ({
       ...prevState,
-      interests: prevState.interests.filter((_, index) => index !== indexToRemove),
-    }));
+      interests: interests.filter((_,i) => i !== removeIndex)
+    }))
   }
-  
+
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <input
+      <label>
+        Add interest:
+        <input 
           type="text"
           value={newInterest}
-          onChange={e => setNewInterest(e.target.value)}
+          onChange={(e) => setNewInterest(e.target.value)} 
           placeholder="Enter a new Interest"
         />
-        <button type="submit">Add</button>
-      </form>
+        <button onClick={handleAddINterest}>Add</button>
+      </label>
       <div>
         {interests.map((interest, index) => (
           <div key={index}>

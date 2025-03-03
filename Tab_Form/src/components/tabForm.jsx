@@ -1,104 +1,106 @@
-import { useState } from "react";
-import Interest from "./Interest";
-import Profile from "./Profile";
-import Settings from "./Settings";
+import { useState } from "react"
+import InterestForm from "./interest"
+import Profile from "./profile"
+import Settings from "./settings"
 
-export default function TabForm() {
-  const [activeTab, setActiveTab] = useState(0);
-  const [error, setError] = useState({})
+export default function TabFrom (){
+  const [activeTab, setActiveTab ] = useState(0)
   const [data, setData] = useState({
-    name: "",
-    age: '',
+    name:"",
+    age: "",
     email: "",
     interests: [],
-    theme: "dark",
-  });
+    theme: "dark"
+  })
+
+  const [error, setError ] = useState({})
 
   const tabs = [
     {
-      name: "Profile",
+      "name": "profile",
       component: Profile,
-      validate: ()=>{
+      validate: () => {
         const err={}
-        if(!data.name || data.name.length<2){
-          err.name = "name not valide"
+        if(data.name.length <2 ){
+          err.name = "Invalide name"
         }
-        if(!data.age || data.age < 18){
-          err.age = "age not valide"
+        if(data.age <18 ){
+          err.age = "Invalide age"
         }
-        if(!data.email || data.email.length<2){
-          err.email = "email not valide"
+        if(data.email <2 ){
+          err.email = "Invalide email"
         }
         setError(err)
-        return err.name || err.age || err.email ? false : true ;
+        return err.name || err.age || err.email ? false : true
       }
     },
     {
-      name: "Interest",
-      component: Interest,
-      validate: ()=>{
-        const err={}
+      "name": "interest",
+      component: InterestForm,
+      validate: () => {
+        const err = {}
         if(data.interests.length < 1){
-          err.interests= "Atleast put one interest"
+          err.interests="Add atleast one"
         }
         setError(err)
         return err.interests ? false : true;
       }
     },
     {
-      name: "Settings",
+      "name": "settings",
       component: Settings,
-      validate: () => {
+      validate : () => {
         return true
       }
-    },
-  ];
+    }
+  ]
 
   const ActiveTabComponent = tabs[activeTab].component;
 
   const handleTabClick = (index) => {
     if(tabs[activeTab].validate()){
-      setActiveTab(index);
+      setActiveTab(index)
     }
-  };
-
-  const handleSubmitButton = () => {
-    console.log("data", data)
   }
 
-  const handlePrevButton= () => {
+  const handlePrevButton = () => {
     if(tabs[activeTab].validate()){
-      setActiveTab((prev) => prev - 1)
+      setActiveTab((prev) => prev-1)
     }
   }
 
   const handleNextButton = () => {
     if(tabs[activeTab].validate()){
-      setActiveTab((prev) => prev + 1)
+      setActiveTab((prev) => prev+1)
     }
   }
 
+  const handleSubmitButton = () => {
+    alert("submited");
+    console.log(data)
+  }
+
   return (
-    <>
+    <div>
       <div className="headingContainer">
-        {tabs.map((t, index) => (
-          <div
+        {tabs.map((tab,index) => (
+          <div 
+            className="heading" 
             key={index}
-            className="heading"
             onClick={() => handleTabClick(index)}
           >
-            {t.name}
+            {tab.name}
           </div>
         ))}
       </div>
-      <div className="tabBody">
+      <div className="mainContainer">
         <ActiveTabComponent data={data} setData={setData} error={error}/>
       </div>
       <div>
-        {activeTab > 0 && <button onClick={handlePrevButton}>prev</button>}
-        {activeTab < tabs.length-1 && <button onClick={handleNextButton}>next</button>}
-        {activeTab === tabs.length-1 && <button onClick={handleSubmitButton}>Submit</button>}
+        {activeTab > 0 && <button onClick={handlePrevButton}>Prev</button>}
+        {activeTab < tabs.length - 1 && <button onClick={handleNextButton}>Next</button>}
+        {activeTab === tabs.length - 1 && <button onClick={handleSubmitButton}>Submit</button>}
       </div>
-    </>
-  );
+    </div>
+  )
 }

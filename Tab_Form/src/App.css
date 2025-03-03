@@ -10,20 +10,17 @@
   border: 1px solid black;
   cursor: pointer;
 }
-.tabBody {
-  display: flex;
+.mainContainer {
   border: 1px solid black;
-  height: 200px;
-  padding: 5px;
+  height: 300px;
+  width: 400px;
 }
+.profile {
+  display: grid
+}
+
 .error {
   color: red;
   display: block;
   font-size: small;
-}
-/* .settings {
-  display: block;
-} */
-.profile {
-  display: grid;
 }
