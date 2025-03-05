@@ -1,35 +1,36 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import './app.css'
+import { useState } from "react"
+import ProductCard from "./components/productCard"
+import PaginationComponent from "./components/paginationComponent"
+import { ITEMS_PER_PAGE } from "./constants/constants"
+import { useFetchProducts } from "./customHook/useFetchProducts"
 
-function App() {
-  const [count, setCount] = useState(0)
-
+export default function App () {
+  const [currentPage, setCurrentPage] = useState(0)
+  const { products, loading, error } = useFetchProducts("https://dummyjson.com/products")
+  
+  const totalProducts = products.length
+  const noOfPages = Math.ceil(totalProducts / ITEMS_PER_PAGE);
+  const start = currentPage * ITEMS_PER_PAGE
+  const end = start + ITEMS_PER_PAGE
+  
+  if(loading) return <h1>Loading...</h1>
+  if(error) return <h1>Error: {error.message}</h1>
+  if(!products) return <h1>No data present</h1>
+  
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div>
+      <h1>Pagination</h1>
+      <PaginationComponent 
+        setCurrentPage = {setCurrentPage}
+        currentPage = {currentPage}
+        noOfPages = {noOfPages}
+      />
+      <div className="productContainer">
+        { products.slice(start, end).map(p => (
+          <ProductCard key={p.id} product={p} />
+        ))}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
-
-export default App
